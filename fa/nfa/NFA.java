@@ -3,7 +3,7 @@ package fa.nfa;
 import fa.State;
 
 public class NFA implements NFAInterface {
-
+    // Nick
     @java.lang.Override
     public boolean addState(String name) {
         return false;
@@ -39,6 +39,7 @@ public class NFA implements NFAInterface {
         return null;
     }
 
+    // Flynn
     @java.lang.Override
     public boolean isFinal(String name) {
         return false;
