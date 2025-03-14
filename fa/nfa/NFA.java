@@ -1,7 +1,10 @@
 package fa.nfa;
 
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
+import java.util.Stack;
 
 public class NFA implements NFAInterface {
     // the states store isFinal, so contains F
@@ -120,22 +123,43 @@ public class NFA implements NFAInterface {
     // Flynn
     @Override
     public boolean isFinal(String name) {
-        return false;
+        NFAState state = getState(name);
+        return state != null && state.isFinal();
     }
 
     @Override
     public boolean isStart(String name) {
-        return false;
+        return start != null && start.getName().equals(name);
     }
 
     @Override
     public Set<NFAState> getToState(NFAState from, char onSymb) {
-        return null;
+        if (from == null) return Collections.emptySet();  // Handle null case
+        return from.getTransitions(onSymb);  // Return states
     }
 
     @Override
     public Set<NFAState> eClosure(NFAState s) {
-        return null;
+        Set<NFAState> closure = new HashSet<>();
+        Stack<NFAState> stack = new Stack<>();
+
+        // Start from s and add it to the closure
+        stack.push(s);
+        closure.add(s);
+
+        while (!stack.isEmpty()) {
+            NFAState current = stack.pop();
+
+            // Get all states reachable by epsilon 
+            for (NFAState nextState : current.getTransitions('e')) {
+                if (!closure.contains(nextState)) {  // Avoid revisiting states
+                    closure.add(nextState);
+                    stack.push(nextState);
+                }   
+            }
+        }
+
+        return closure;
     }
 
     @Override
@@ -145,7 +169,17 @@ public class NFA implements NFAInterface {
 
     @Override
     public boolean addTransition(String fromState, Set<String> toStates, char onSymb) {
-        return false;
+        NFAState from = getState(fromState);
+        if (from == null) return false;  // check if state exists
+
+        for (String toStateName : toStates) {
+            NFAState to = getState(toStateName);
+            if (to == null) return false;  // check if state exists
+
+            from.addTransition(onSymb, to);  // Add transition in NFAState
+        }
+
+        return true;
     }
 
     @Override
