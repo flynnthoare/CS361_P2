@@ -6,6 +6,14 @@ import java.util.Set;
 import fa.FAInterface;
 
 
+/**
+ * This class represents a non-deterministic finite automata (NFA).
+ * This class can test a string against the automata, returning
+ * whether the string is accepted by the machine or not.
+ *
+ * @author Nick Bortz & Flynn Hoare
+ * @since 2025-03-14
+ */
 public interface NFAInterface extends FAInterface {
 	
 	
