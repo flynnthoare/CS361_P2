@@ -93,6 +93,43 @@ public class NFA implements NFAInterface {
 
     @Override
     public boolean accepts(String s) {
+        Set<NFAState> currentStates = new HashSet<>();
+        currentStates.add(start);
+
+        int charIdx = 0;
+
+        // While s is not empty
+        while (charIdx < s.length()) {
+            char currentChar = s.charAt(charIdx);
+            Set<NFAState> newStates = new HashSet<>();
+
+            // Loop through all current states
+            for (NFAState state : currentStates) {
+                // Get all possible states to transition to and add them to the newStates set
+                Set<NFAState> possibleStates = getToState(state, currentChar);
+                newStates.addAll(possibleStates);
+
+                // Loop through all of these states and add the corresponding epsilon transition states
+                for (NFAState possibleState : possibleStates) {
+                    newStates.addAll(eClosure(possibleState));
+                }
+            }
+
+            // If newStates is empty, there is nowhere to go, so the string is not accepted
+            if (newStates.isEmpty())
+                return false;
+
+            currentStates = newStates;
+            charIdx++;
+        }
+
+        // If any current state is final, this string is accepted
+        for (NFAState state : currentStates) {
+            if (state.isFinal())
+                return true;
+        }
+
+        // The current state is not a final state, so the string is not accepted
         return false;
     }
 
