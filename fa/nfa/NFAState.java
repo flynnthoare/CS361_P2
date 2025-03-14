@@ -12,7 +12,7 @@ public class NFAState extends State {
     private boolean isStart;
     private boolean isFinal;
 
-    private Map<Character, Set<NFAState>> transitions;
+    private final Map<Character, Set<NFAState>> transitions;
 
     public NFAState(String name) {
         super(name);
@@ -44,7 +44,7 @@ public class NFAState extends State {
     }
 
     // Retrieve all states reachable from this state on a given symbol
-    public Set<NFAState> getTransitions(char onSymb) {
+    public Set<NFAState> toStates(char onSymb) {
         return transitions.getOrDefault(onSymb, Collections.emptySet());
     }
 

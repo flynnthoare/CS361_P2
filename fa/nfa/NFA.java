@@ -95,6 +95,7 @@ public class NFA implements NFAInterface {
     public boolean accepts(String s) {
         Set<NFAState> currentStates = new HashSet<>();
         currentStates.add(start);
+        currentStates.addAll(eClosure(start));
 
         int charIdx = 0;
 
@@ -172,7 +173,7 @@ public class NFA implements NFAInterface {
     @Override
     public Set<NFAState> getToState(NFAState from, char onSymb) {
         if (from == null) return Collections.emptySet();  // Handle null case
-        return from.getTransitions(onSymb);  // Return states
+        return from.toStates(onSymb);  // Return states
     }
 
     @Override
@@ -188,7 +189,7 @@ public class NFA implements NFAInterface {
             NFAState current = stack.pop();
 
             // Get all states reachable by epsilon 
-            for (NFAState nextState : current.getTransitions('e')) {
+            for (NFAState nextState : current.toStates('e')) {
                 if (!closure.contains(nextState)) {  // Avoid revisiting states
                     closure.add(nextState);
                     stack.push(nextState);
@@ -208,6 +209,7 @@ public class NFA implements NFAInterface {
     public boolean addTransition(String fromState, Set<String> toStates, char onSymb) {
         NFAState from = getState(fromState);
         if (from == null) return false;  // check if state exists
+        if (!sigma.contains(onSymb) && onSymb != 'e') return false; // check if symbol is in sigma
 
         for (String toStateName : toStates) {
             NFAState to = getState(toStateName);
