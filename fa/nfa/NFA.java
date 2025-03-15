@@ -24,7 +24,6 @@ public class NFA implements NFAInterface {
         start = null;
     }
 
-    // Nick
     /**
      * Adds a new state to the NFA.
      * @param name The name of the state to add.
@@ -158,24 +157,45 @@ public class NFA implements NFAInterface {
         return null;
     }
 
-    // Flynn
+    /**
+	 * Determines if a state with a given name is final
+	 * @param name the name of the state
+	 * @return true if a state with that name exists and it is final
+	 */
     @Override
     public boolean isFinal(String name) {
         NFAState state = getState(name);
         return state != null && state.isFinal();
     }
 
+    /**
+	 * Determines if a state with name is final
+	 * @param name the name of the state
+	 * @return true if a state with that name exists and it is the start state
+	 */
     @Override
     public boolean isStart(String name) {
         return start != null && start.getName().equals(name);
     }
 
+    /**
+	 * Return delta entries
+	 * @param from - the source state
+	 * @param onSymb - the label of the transition
+	 * @return a set of sink states
+	 */
     @Override
     public Set<NFAState> getToState(NFAState from, char onSymb) {
         if (from == null) return Collections.emptySet();  // Handle null case
         return from.toStates(onSymb);  // Return states
     }
 
+    /**
+	 * Traverses all epsilon transitions and determine
+	 * what states can be reached from s through e
+	 * @param s
+	 * @return set of states that can be reached from s on epsilon trans.
+	 */
     @Override
     public Set<NFAState> eClosure(NFAState s) {
         Set<NFAState> closure = new HashSet<>();
@@ -200,6 +220,12 @@ public class NFA implements NFAInterface {
         return closure;
     }
 
+    /**
+	 * Determines the maximum number of NFA copies
+	 * created when processing string s
+	 * @param s - the input string
+	 * @return - the maximum number of NFA copies created.
+	 */
     @Override
     public int maxCopies(String s) {
         Set<NFAState> currentStates = new HashSet<>();
@@ -241,6 +267,13 @@ public class NFA implements NFAInterface {
         return maxNumCopies;
     }
 
+    /**
+	 * Adds the transition to the NFA's delta data structure
+	 * @param fromState is the label of the state where the transition starts
+	 * @param toState is the set of labels of the states where the transition ends
+	 * @param onSymb is the symbol from the NFA's alphabet.
+	 * @return true if successful and false if one of the states don't exist or the symbol in not in the alphabet
+	 */
     @Override
     public boolean addTransition(String fromState, Set<String> toStates, char onSymb) {
         NFAState from = getState(fromState);
@@ -257,8 +290,27 @@ public class NFA implements NFAInterface {
         return true;
     }
 
+    /**
+	 * Determines if NFA is an instance of a DFA
+	 * @return - true if NFA's transition function has DFA's properties.
+	 */
     @Override
     public boolean isDFA() {
-        return false;
+        for (NFAState state : states) {
+            // Check for epsilon transitions
+            if (!state.toStates('e').isEmpty()) {
+                return false;  
+            }
+    
+            // Check that each symbol has at most ONE transition
+            for (char symbol : sigma) {
+                if (state.toStates(symbol).size() > 1) {
+                    return false;  
+                }
+            }
+        }
+    
+        return true;  // No epsilon transitions, and all symbols have one transition at most
+    
     }
 }

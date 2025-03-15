@@ -37,13 +37,25 @@ public class NFAState extends State {
         isFinal = true;
     }
 
-    // Add a transition to another state on a given symbol
+    /**
+     * Adds a transition from this state to another state on a given input symbol.
+     * If a transition on this symbol already exists, the new state is added to the set.
+     *
+     * @param onSymb   The input symbol that triggers the transition.
+     * @param toState  The destination state for this transition.
+     */
     public void addTransition(char onSymb, NFAState toState) {
         transitions.putIfAbsent(onSymb, new HashSet<>());  // Ensure key exists
         transitions.get(onSymb).add(toState);
     }
 
-    // Retrieve all states reachable from this state on a given symbol
+    /**
+     * Retrieves the set of states that can be reached from this state on a given input symbol.
+     * If no transitions exist for the given symbol, returns an empty set.
+     *
+     * @param onSymb  The input symbol for which transitions should be retrieved.
+     * @return A set of NFAState objects representing the possible next states.
+     */
     public Set<NFAState> toStates(char onSymb) {
         return transitions.getOrDefault(onSymb, Collections.emptySet());
     }
