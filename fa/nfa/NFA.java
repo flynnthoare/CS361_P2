@@ -202,7 +202,43 @@ public class NFA implements NFAInterface {
 
     @Override
     public int maxCopies(String s) {
-        return 0;
+        Set<NFAState> currentStates = new HashSet<>();
+        currentStates.add(start);
+        currentStates.addAll(eClosure(start));
+
+        int charIdx = 0;
+        int maxNumCopies = currentStates.size();
+
+        // While s is not empty
+        while (charIdx < s.length()) {
+            char currentChar = s.charAt(charIdx);
+            Set<NFAState> newStates = new HashSet<>();
+
+            // Loop through all current states
+            for (NFAState state : currentStates) {
+                // Get all possible states to transition to and add them to the newStates set
+                Set<NFAState> possibleStates = getToState(state, currentChar);
+                newStates.addAll(possibleStates);
+
+                // Loop through all of these states and add the corresponding epsilon transition states
+                for (NFAState possibleState : possibleStates) {
+                    newStates.addAll(eClosure(possibleState));
+                }
+            }
+
+            // If newStates is empty, there is nowhere to go, so the string is not accepted
+            if (newStates.isEmpty())
+                break;
+
+            // Update the max number of copies with the number of active states
+            maxNumCopies = Math.max(maxNumCopies, newStates.size());
+
+            currentStates = newStates;
+            charIdx++;
+        }
+
+        // The current state is not a final state, so the string is not accepted
+        return maxNumCopies;
     }
 
     @Override
