@@ -14,14 +14,13 @@ the language that the NFA defines.
 
 ## Reflection
 ### Flynn
-As a whole, the project went very smoothly. I think the thing that caused
-the most trouble was figuring out what structure to use in order to contain
-the transition table for each DFA. The first thing we tried was using Hashmap
-of type <String, String> and using a comma as a delimiter in order to separate
-the start state and the symbol we were transitioning on. Thinking this could
-cause problems if states were created using names with the delimeter we were
-using, we ended up settling on a nested Hashmap instead. Besides that, we didn't
-run into any problems that weren't quickly resolved.
+This project went smoothly much like the last. There were a lot of things I was
+able to bring over from P1, but there were some major differences as well. This
+time around I think we structured our classes a bit better, adding more to the NFAState
+class than we had in the DFAState class in the previous project. Overall, I didn't run
+into any problems and we were able to get it passing the tests fairly easily. I think
+for the future it would be much smarter to start the project much earlier, as getting
+caught up in midterms caused me to procrastinate this project way too much. 
 
 ### Nick
 The project went very smoothly this time around. The only thing that took some
@@ -38,5 +37,19 @@ similar uses to work differently and, sometimes, more simply.
 
 ## Compiling and Using
 
+To compile, execute the following command in the main project directory:
+```
+javac -cp .:/usr/share/java/junit.jar ./test/nfa/NFATest.java
+```
+Run the compiled class with the command:
+```
+java -cp .:/usr/share/java/junit.jar:/usr/share/java/hamcrest/core.jar
+org.junit.runner.JUnitCore test.nfa.NFATest
+```
+The program requires no user input.
 
 ## Sources used
+
+https://docs.oracle.com/javase/8/docs/api/java/util/Set.html
+https://docs.oracle.com/javase/8/docs/api/java/util/Map.html
+https://docs.oracle.com/javase/8/docs/api/java/util/Stack.html
