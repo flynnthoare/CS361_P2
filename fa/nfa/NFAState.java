@@ -8,6 +8,13 @@ import java.util.Set;
 
 import fa.State;
 
+/**
+ * Represents a state in a non-deterministic finite automaton (NFA).
+ * Supports state properties, transitions (including epsilon), and retrieval of reachable states.
+ *
+ * @author Nick Bortz & Flynn Hoare
+ * @since 2025-03-14
+ */
 public class NFAState extends State {
     private boolean isStart;
     private boolean isFinal;

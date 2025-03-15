@@ -6,6 +6,14 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.Stack;
 
+/**
+ * Represents a non-deterministic finite automaton (NFA).
+ * Supports state management, transitions (including epsilon),
+ * input processing, epsilon closure computation, and DFA checks.
+ *
+ * @author Nick Bortz & Flynn Hoare
+ * @since 2025-03-14
+ */
 public class NFA implements NFAInterface {
     // the states store isFinal, so contains F
     private final LinkedHashSet<NFAState> states;
